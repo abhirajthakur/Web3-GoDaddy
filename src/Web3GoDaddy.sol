@@ -13,7 +13,7 @@ contract Web3GoDaddy is ERC721, Ownable {
     struct Domain {
         string name;
         uint256 cost;
-        address owner;
+        bool isOwned;
     }
 
     using Counters for Counters.Counter;
@@ -40,7 +40,7 @@ contract Web3GoDaddy is ERC721, Ownable {
     function list(string memory _name, uint256 _cost) public onlyOwner {
         uint256 currentSupply = maxSupply.current();
         maxSupply.increment();
-        domains[currentSupply] = Domain(_name, _cost, address(0));
+        domains[currentSupply] = Domain(_name, _cost, false);
     }
 
     /**
@@ -51,14 +51,14 @@ contract Web3GoDaddy is ERC721, Ownable {
         if (_id > maxSupply.current()) {
             revert Web3GoDaddy__ExceededMaxSupply();
         }
-        if (domains[_id].owner != address(0)) {
+        if (domains[_id].isOwned) {
             revert Web3GoDaddy__AlreadyMinted();
         }
         if (msg.value < domains[_id].cost) {
             revert Web3GoDaddy__InsufficientAmount();
         }
 
-        domains[_id].owner = msg.sender;
+        domains[_id].isOwned = true;
         totalSupply.increment();
 
         _safeMint(msg.sender, _id);

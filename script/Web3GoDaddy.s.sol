@@ -7,18 +7,20 @@ import "../src/Web3GoDaddy.sol";
 contract Web3GoDaddyScript is Script {
     Web3GoDaddy web3GoDaddy;
 
-    function setUp() public {
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        vm.broadcast(deployerPrivateKey);
-    }
-
     function run() public {
-        web3GoDaddy = new Web3GoDaddy("Web3 Hostinger", "W3H");
-        console.log("Deployed Domain Contract at:", address(web3GoDaddy));
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        vm.startBroadcast(deployerPrivateKey);
+
+        web3GoDaddy = new Web3GoDaddy("Web3 Hostinger", "W3H"); // 0x46574911189Ae52eBDC037D04248aE668cA65209
+        vm.stopBroadcast();
+
         listDomains();
     }
 
     function listDomains() public {
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        vm.startBroadcast(deployerPrivateKey);
+
         string[4] memory names = [
             "jadu.eth",
             "aman.eth",
@@ -34,5 +36,7 @@ contract Web3GoDaddyScript is Script {
         for (uint i = 0; i < 4; i++) {
             console.log("Listed Domain", i + 1, ":", names[i]);
         }
+
+        vm.stopBroadcast();
     }
 }
