@@ -47,7 +47,7 @@ const DomainCard = ({ domain, id }) => {
 
   useEffect(() => {
     getOwner();
-  }, [hasSold]);
+  }, [hasSold, ownerOf]);
 
   return (
     <>
