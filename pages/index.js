@@ -1,11 +1,41 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-
-const inter = Inter({ subsets: ['latin'] })
+import DomainCard from "@/components/DomainCard";
+import Navigation from "@/components/Navigation";
+import Search from "@/components/Search";
+import { abi, web3GoDaddyAddress } from "@/constants";
+import Head from "next/head";
+import { useEffect, useState } from "react";
+import { useAccount, useContract, useContractRead, useProvider } from "wagmi";
 
 export default function Home() {
+  const { address } = useAccount();
+  const [domains, setDomains] = useState([]);
+  const provider = useProvider();
+
+  const contract = useContract({
+    address: web3GoDaddyAddress,
+    abi: abi,
+    signerOrProvider: provider,
+  });
+
+  const { data: maxSupply } = useContractRead({
+    abi: abi,
+    address: web3GoDaddyAddress,
+    functionName: "maxSupply",
+  });
+
+  const loadBlockchainData = async () => {
+    let domains = [];
+    for (let i = 0; i < maxSupply; i++) {
+      const domain = await contract.getDomain(i);
+      domains.push(domain);
+    }
+    setDomains(domains);
+  };
+
+  useEffect(() => {
+    loadBlockchainData();
+  }, [address]);
+
   return (
     <>
       <Head>
@@ -14,110 +44,27 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
+      <main>
+        <Navigation />
+        <Search />
+        <div className="flex flex-col items-center ">
+          <h1 className="text-3xl font-bold mt-5 p-2">
+            Why do you need a domain name?
+          </h1>
           <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.js</code>
+            Own your custom username, use it across services, and be able to
+            store avatar and other profile data
           </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
+          <div className="bg-black h-0.5 w-screen max-w-4xl"></div>
+          <div className="flex justify-center">
+            <div className="flex flex-col">
+              {domains.map((domain, index) => (
+                <DomainCard key={index} domain={domain} id={index} />
+              ))}
+            </div>
           </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
         </div>
       </main>
     </>
-  )
+  );
 }

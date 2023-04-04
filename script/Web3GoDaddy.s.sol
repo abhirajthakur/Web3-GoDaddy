@@ -11,7 +11,7 @@ contract Web3GoDaddyScript is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        web3GoDaddy = new Web3GoDaddy("Web3 Hostinger", "W3H"); // 0x46574911189Ae52eBDC037D04248aE668cA65209
+        web3GoDaddy = new Web3GoDaddy("Web3 Hostinger", "W3H"); // 0x3a4Ab095DabACE3dbFFe8b84f2C8F5aa613ac342
         vm.stopBroadcast();
 
         listDomains();

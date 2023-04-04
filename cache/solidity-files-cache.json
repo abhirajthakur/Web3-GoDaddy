@@ -1298,8 +1298,8 @@
       }
     },
     "script/Web3GoDaddy.s.sol": {
-      "lastModificationDate": 1680336180238,
-      "contentHash": "ebcfecc78c9f63e462ba60d9a0c1ba37",
+      "lastModificationDate": 1680464263775,
+      "contentHash": "086fa56b7da1e81f39582948a1b81e7d",
       "sourceName": "script/Web3GoDaddy.s.sol",
       "solcConfig": {
         "settings": {
@@ -1364,8 +1364,8 @@
       }
     },
     "src/Web3GoDaddy.sol": {
-      "lastModificationDate": 1680336391888,
-      "contentHash": "e8b44ee101d6415f2047b46709559db4",
+      "lastModificationDate": 1680442506816,
+      "contentHash": "4f69206d1c73b378be86a97dde645dda",
       "sourceName": "src/Web3GoDaddy.sol",
       "solcConfig": {
         "settings": {
@@ -1416,10 +1416,10 @@
         }
       }
     },
-    "test/Web3GoDaddy.sol": {
-      "lastModificationDate": 1680336825228,
-      "contentHash": "410d23f3e4c7055d31494e6f3f989763",
-      "sourceName": "test/Web3GoDaddy.sol",
+    "test/Web3GoDaddy.t.sol": {
+      "lastModificationDate": 1680442353936,
+      "contentHash": "6b719655f4f84cc311595aba52c91796",
+      "sourceName": "test/Web3GoDaddy.t.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -1483,7 +1483,7 @@
       "versionRequirement": "^0.8.13",
       "artifacts": {
         "Web3GoDaddyTest": {
-          "0.8.17+commit.8df45f5f.Linux.gcc": "Web3GoDaddy.sol/Web3GoDaddyTest.json"
+          "0.8.17+commit.8df45f5f.Linux.gcc": "Web3GoDaddy.t.sol/Web3GoDaddyTest.json"
         }
       }
     }
