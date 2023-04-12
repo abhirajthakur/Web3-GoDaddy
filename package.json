@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^0.12.5",
+    "@web3uikit/core": "^0.4.3",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "ethers": "^5.7.2",
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-loader-spinner": "^5.3.4",
     "wagmi": "^0.12.8"
   },
   "devDependencies": {

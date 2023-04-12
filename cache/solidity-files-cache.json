@@ -1298,8 +1298,8 @@
       }
     },
     "script/Web3GoDaddy.s.sol": {
-      "lastModificationDate": 1680464263775,
-      "contentHash": "086fa56b7da1e81f39582948a1b81e7d",
+      "lastModificationDate": 1681328713340,
+      "contentHash": "53d6ec391bab469997852a40ec81a637",
       "sourceName": "script/Web3GoDaddy.s.sol",
       "solcConfig": {
         "settings": {

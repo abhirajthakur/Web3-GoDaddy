@@ -1,8 +1,8 @@
+import Head from "next/head";
 import DomainCard from "@/components/DomainCard";
 import Navigation from "@/components/Navigation";
 import Search from "@/components/Search";
 import { abi, web3GoDaddyAddress } from "@/constants";
-import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useAccount, useContract, useContractRead, useProvider } from "wagmi";
 
@@ -33,8 +33,11 @@ export default function Home() {
   };
 
   useEffect(() => {
-    loadBlockchainData();
-  }, [address]);
+    async function load() {
+      await loadBlockchainData();
+    }
+    load();
+  }, [address, maxSupply]);
 
   return (
     <>

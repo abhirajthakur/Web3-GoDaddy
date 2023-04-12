@@ -526,7 +526,8 @@ const abi = [
     type: "function",
   },
 ];
-const web3GoDaddyAddress = "0x3a4Ab095DabACE3dbFFe8b84f2C8F5aa613ac342"; // GOERLI
-// const web3GoDaddyAddress = "0x5fc8d32690cc91d4c39d9d3abcbd16989f875707"; // LOCALHOST
+
+const web3GoDaddyAddress = "0x78d7c768308ce5999fedaf962ce590f64a394a23"; // GOERLI
+// const web3GoDaddyAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3"; // LOCALHOST
 
 module.exports = { web3GoDaddyAddress, abi };

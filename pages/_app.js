@@ -1,9 +1,11 @@
 import "@/styles/globals.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
+import { NotificationProvider } from "@web3uikit/core";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
+import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 const localhost = {
@@ -25,12 +27,13 @@ const localhost = {
 };
 
 const { chains, provider } = configureChains(
-  [goerli /* localhost */],
+  [goerli, /* localhost */],
   [
-    alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
-    jsonRpcProvider({
-      rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] }),
-    }),
+    // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
+    publicProvider(),
+    // jsonRpcProvider({
+    //   rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] }),
+    // }),
   ]
 );
 
@@ -49,7 +52,9 @@ export default function App({ Component, pageProps }) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains} modalSize="compact" coolMode>
-        <Component {...pageProps} />
+        <NotificationProvider>
+          <Component {...pageProps} />
+        </NotificationProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );

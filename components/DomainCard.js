@@ -10,7 +10,9 @@ const DomainCard = ({ domain, id }) => {
   const [owner, setOwner] = useState(null);
   const [hasSold, setHasSold] = useState(false);
 
-  const { data: ownerOf } = useContractRead({
+  const {
+    data: ownerOf,
+  } = useContractRead({
     abi: abi,
     address: web3GoDaddyAddress,
     functionName: "ownerOf",
@@ -40,8 +42,7 @@ const DomainCard = ({ domain, id }) => {
 
   const getOwner = async () => {
     if (domain.isOwned || hasSold) {
-      const owner = await ownerOf;
-      setOwner(owner);
+      setOwner(ownerOf);
     }
   };
 
