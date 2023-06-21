@@ -15,32 +15,32 @@ contract Web3GoDaddyTest is Test {
         hoax(user); // provide user with some ether
     }
 
-    function testName() public {
+    function test_Name() public {
         assertEq(web3GoDaddy.name(), "Web3 GoDaddy");
     }
 
-    function testSymbol() public {
+    function test_Symbol() public {
         assertEq(web3GoDaddy.symbol(), "W3G");
     }
 
-    function testOwner() public {
+    function test_Owner() public {
         assertEq(web3GoDaddy.owner(), address(this));
     }
 
-    function testList() public {
+    function test_List() public {
         web3GoDaddy.list("test.eth", 10 ether);
     }
 
-    function testTotalSupplyBeforeMinting() public {
+    function test_TotalSupplyBeforeMinting() public {
         assertEq(web3GoDaddy.totalSupply(), 0);
     }
 
-    function testFailList() public {
+    function test_FailList() public {
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.list("test.eth", 10 ether);
     }
 
-    function testDomain() public {
+    function test_Domain() public {
         testList();
         // (string memory name, uint256 cost, address owner) = web3Hostinger.domains(0);
         string memory name = web3GoDaddy.getDomain(0).name;
@@ -51,25 +51,25 @@ contract Web3GoDaddyTest is Test {
         assertEq(isOwned, false);
     }
 
-    function testMaxSupply() public {
+    function test_MaxSupply() public {
         testList();
         assertEq(web3GoDaddy.maxSupply(), 1);
     }
 
-    function testMint() public {
+    function test_Mint() public {
         testList();
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.mint{value: 10 ether}(0);
         assertEq(web3GoDaddy.ownerOf(0), user);
     }
 
-    function testFailMintIncorrectId() public {
+    function testFail_MintIncorrectId() public {
         testList();
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.mint{value: 10 ether}(3);
     }
 
-    function testFailMintAlreadyMinted() public {
+    function testFail_MintAlreadyMinted() public {
         testList();
         vm.startPrank(user);
         web3GoDaddy.mint{value: 10 ether}(0);
@@ -77,43 +77,43 @@ contract Web3GoDaddyTest is Test {
         web3GoDaddy.mint{value: 10 ether}(0);
     }
 
-    function testFailMintInsufficentValueSend() public {
+    function testFail_MintInsufficentValueSend() public {
         testList();
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.mint{value: 5 ether}(0);
     }
 
-    function testGetBalance() public {
+    function test_GetBalance() public {
         testList();
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.mint{value: 10 ether}(0);
         assertEq(web3GoDaddy.getBalance(), 10 ether);
     }
 
-    function testDomainOwner() public {
+    function test_DomainOwner() public {
         testMint();
         address owner = web3GoDaddy.ownerOf(0);
         assertEq(owner, user);
     }
 
-    function testTotalSupplyAfterMinting() public {
+    function test_TotalSupplyAfterMinting() public {
         testMint();
         assertEq(web3GoDaddy.totalSupply(), 1);
     }
 
-    function testWithdraw() public {
+    function test_Withdraw() public {
         testMint();
         web3GoDaddy.withdraw();
         assertEq(address(web3GoDaddy).balance, 0);
     }
 
-    function testFailWithdraw() public {
+    function testFail_Withdraw() public {
         testMint();
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.withdraw();
     }
 
-    function testUpdateBalance() public {
+    function test_UpdateBalance() public {
         uint256 balanceBefore = address(this).balance;
         testWithdraw();
         uint256 balanceAfter = address(this).balance;
