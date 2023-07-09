@@ -9,39 +9,46 @@ contract Web3GoDaddyTest is Test {
     Web3GoDaddy public web3GoDaddy;
     address private user;
 
+    modifier mintDomain() {
+        web3GoDaddy.list("test.eth", 10 ether);
+        vm.prank(user); // Change msg.sender to user
+        web3GoDaddy.mint{value: 10 ether}(0);
+        _;
+    }
+
+    modifier listDomain() {
+        web3GoDaddy.list("test.eth", 10 ether);
+        _;
+    }
+
     function setUp() public {
         web3GoDaddy = new Web3GoDaddy("Web3 GoDaddy", "W3G"); // Deploy Web3GoDaddy smart contract
         user = makeAddr("User"); // create a address
-        hoax(user); // provide user with some ether
+        hoax(user, 50 ether); // provide user with some ether
     }
 
-    function test_Name() public {
+    function testName() public {
         assertEq(web3GoDaddy.name(), "Web3 GoDaddy");
     }
 
-    function test_Symbol() public {
+    function testSymbol() public {
         assertEq(web3GoDaddy.symbol(), "W3G");
     }
 
-    function test_Owner() public {
+    function testOwner() public {
         assertEq(web3GoDaddy.owner(), address(this));
     }
 
-    function test_List() public {
-        web3GoDaddy.list("test.eth", 10 ether);
-    }
-
-    function test_TotalSupplyBeforeMinting() public {
+    function testTotalSupplyBeforeMinting() public {
         assertEq(web3GoDaddy.totalSupply(), 0);
     }
 
-    function test_FailList() public {
+    function testFailList() public {
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.list("test.eth", 10 ether);
     }
 
-    function test_Domain() public {
-        testList();
+    function testDomain() public listDomain {
         // (string memory name, uint256 cost, address owner) = web3Hostinger.domains(0);
         string memory name = web3GoDaddy.getDomain(0).name;
         uint256 cost = web3GoDaddy.getDomain(0).cost;
@@ -51,69 +58,58 @@ contract Web3GoDaddyTest is Test {
         assertEq(isOwned, false);
     }
 
-    function test_MaxSupply() public {
-        testList();
+    function testMaxSupply() public listDomain {
         assertEq(web3GoDaddy.maxSupply(), 1);
     }
 
-    function test_Mint() public {
-        testList();
+    function testMint() public listDomain {
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.mint{value: 10 ether}(0);
         assertEq(web3GoDaddy.ownerOf(0), user);
     }
 
-    function testFail_MintIncorrectId() public {
-        testList();
+    function testFailMintIncorrectId() public mintDomain {
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.mint{value: 10 ether}(3);
     }
 
-    function testFail_MintAlreadyMinted() public {
-        testList();
-        vm.startPrank(user);
+    function testFailMintAlreadyMinted() public mintDomain {
+        vm.prank(user);
         web3GoDaddy.mint{value: 10 ether}(0);
-        vm.stopPrank();
         web3GoDaddy.mint{value: 10 ether}(0);
     }
 
-    function testFail_MintInsufficentValueSend() public {
-        testList();
+    function testFailMintInsufficentValueSend() public mintDomain {
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.mint{value: 5 ether}(0);
     }
 
-    function test_GetBalance() public {
-        testList();
+    function testGetBalance() public listDomain {
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.mint{value: 10 ether}(0);
         assertEq(web3GoDaddy.getBalance(), 10 ether);
     }
 
-    function test_DomainOwner() public {
-        testMint();
+    function testDomainOwner() public mintDomain {
         address owner = web3GoDaddy.ownerOf(0);
         assertEq(owner, user);
     }
 
-    function test_TotalSupplyAfterMinting() public {
-        testMint();
+    function testTotalSupplyAfterMinting() public mintDomain {
         assertEq(web3GoDaddy.totalSupply(), 1);
     }
 
-    function test_Withdraw() public {
-        testMint();
+    function testWithdraw() public mintDomain {
         web3GoDaddy.withdraw();
         assertEq(address(web3GoDaddy).balance, 0);
     }
 
-    function testFail_Withdraw() public {
-        testMint();
+    function testFailWithdraw() public mintDomain {
         vm.prank(user); // Change msg.sender to user
         web3GoDaddy.withdraw();
     }
 
-    function test_UpdateBalance() public {
+    function testUpdateBalance() public {
         uint256 balanceBefore = address(this).balance;
         testWithdraw();
         uint256 balanceAfter = address(this).balance;
